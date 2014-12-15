@@ -1,5 +1,6 @@
 #include "Sample1.h"
 #include <string.h>
+#include <ctype.h>
 
 JNIEXPORT jint JNICALL Java_Sample1_intMethod
   (JNIEnv *env, jobject obj, jint num)
@@ -13,6 +14,13 @@ JNIEXPORT jboolean JNICALL Java_Sample1_booleanMethod
 	return !boolean;
 }
 
+void strupr(char *str, int maxlen) 
+{
+  int i=0;
+  for (; i < maxlen && str[i] != '\0'; i++)
+    str[i] = (char)toupper(str[i]);
+}
+
 JNIEXPORT jstring JNICALL Java_Sample1_stringMethod
   (JNIEnv *env, jobject obj, jstring string)
 {
@@ -20,7 +28,8 @@ JNIEXPORT jstring JNICALL Java_Sample1_stringMethod
 	char cap[128];
 	strcpy(cap, str);
 	(*env)->ReleaseStringUTFChars(env, string, str);
-	return (*env)->NewStringUTF(env, strupr(cap));
+	strupr(cap,128);
+	return (*env)->NewStringUTF(env, cap);
 }
 
 JNIEXPORT jint JNICALL Java_Sample1_intArrayMethod
