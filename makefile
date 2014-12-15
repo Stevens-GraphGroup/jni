@@ -1,5 +1,6 @@
 ifeq ($(OS),Windows_NT)
     MYOS=Windows_NT
+	java=$(JAVA_HOME)/bin/java
 #    CCFLAGS += -D WIN32
 #    ifeq ($(PROCESSOR_ARCHITECTURE),AMD64)
 #        CCFLAGS += -D AMD64
@@ -14,7 +15,9 @@ ifeq ($(OS),Windows_NT)
 #    endif
 else
     MYOS=Linux
-    JLP=".:/usr/java/packages/lib/amd64:/usr/lib64:/lib64:/lib:/usr/lib"
+#    JLP=".:/usr/java/packages/lib/amd64:/usr/lib64:/lib64:/lib:/usr/lib"
+#	lpath=$(LD_LIBRARY_PATH):.
+	java=java
 #    UNAME_S := $(shell uname -s)
 #    ifeq ($(UNAME_S),Linux)
 #        CCFLAGS += -D LINUX
@@ -34,6 +37,11 @@ else
 #    endif
 endif
 
+#ifndef LD_LIBRARY_PATH
+#	LD_LIBRARY_PATH=""
+#endif
+
+
 .SUFFIXES: .java .class
 .java.class:
 	javac $*.java
@@ -45,14 +53,16 @@ Java:
 	javah Sample1
 
 Windows_NT: Java
-	gcc -Wl,--add-stdcall-alias -I"%JAVA_HOME%\include" -I"%JAVA_HOME%\include\win32" -shared -o Sample1.dll Sample1.c
+#	gcc -Wl,--add-stdcall-alias -I"%JAVA_HOME%\include" -I"%JAVA_HOME%\include\win32" -shared -o Sample1.dll Sample1.c
+	gcc -fpic -m64 -shared -I"$(JAVA_HOME)\include" -I"$(JAVA_HOME)\include\win32" -o Sample1.dll Sample1.c
 
 Linux: Java
-	gcc -fpic -shared -I"$(JAVA_HOME)/include" -I"$(JAVA_HOME)/include/linux" -o libSample1.so Sample1.c
+	gcc -fpic -m64 -shared -I"$(JAVA_HOME)/include" -I"$(JAVA_HOME)/include/linux" -o libSample1.so Sample1.c
 #	gcc -Wl,--add-stdcall-alias -I"$(JAVA_HOME)/include" -I"$(JAVA_HOME)/include/linux" -shared -o Sample1.dll Sample1.c
 
 test: DetectOS Sample1.class
-	java -Djava.library.path=$(JLP) Sample1
+	$(java) -version
+	$(java) Sample1
 
 clean:
 	-$(RM) *.o

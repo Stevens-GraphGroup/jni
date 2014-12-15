@@ -14,7 +14,7 @@ JNIEXPORT jboolean JNICALL Java_Sample1_booleanMethod
 	return !boolean;
 }
 
-void strupr(char *str, int maxlen) 
+void mystrupr(char *str, int maxlen) 
 {
   int i=0;
   for (; i < maxlen && str[i] != '\0'; i++)
@@ -28,7 +28,7 @@ JNIEXPORT jstring JNICALL Java_Sample1_stringMethod
 	char cap[128];
 	strcpy(cap, str);
 	(*env)->ReleaseStringUTFChars(env, string, str);
-	strupr(cap,128);
+	mystrupr(cap,128);
 	return (*env)->NewStringUTF(env, cap);
 }
 
