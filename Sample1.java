@@ -5,28 +5,28 @@ import java.util.StringTokenizer;
 public class Sample1
 {
     static {
-	System.out.println("classloader:");
-	ClassLoader cl = ClassLoader.getSystemClassLoader();
-        URL[] urls = ((URLClassLoader)cl).getURLs();
-        for(URL url: urls){
-	    System.out.println(url.getFile());
-        }
-	
-	System.out.println("\njava.library.path:");
-	String property = System.getProperty("java.library.path");
-	StringTokenizer parser = new StringTokenizer(property, ";");
-	while (parser.hasMoreTokens()) {
-	    System.out.println(parser.nextToken());
-	}
-	System.out.println();
+		System.err.println("debugging info: classloader:");
+		ClassLoader cl = ClassLoader.getSystemClassLoader();
+			URL[] urls = ((URLClassLoader)cl).getURLs();
+			for(URL url: urls){
+			System.err.println(url.getFile());
+			}
+		
+		System.err.println("\njava.library.path:");
+		String property = System.getProperty("java.library.path");
+		StringTokenizer parser = new StringTokenizer(property, ";");
+		while (parser.hasMoreTokens()) {
+			System.err.println(parser.nextToken());
+		}
+		System.err.println();
 
-	try {
-	    //System.load("./Sample1.so");
-	    System.loadLibrary("Sample1");
-	} catch (UnsatisfiedLinkError e) {
-	    System.err.println("Native code library failed to load.\n" + e);
-	    System.exit(1);
-	}
+		try {
+			//System.load("./Sample1.so");
+			System.loadLibrary("Sample1");
+		} catch (UnsatisfiedLinkError e) {
+			System.err.println("Native code library failed to load.\n" + e);
+			System.exit(1);
+		}
     }
 
 
@@ -37,8 +37,6 @@ public class Sample1
 
     public static void main(String[] args)
     {   
-
-
         Sample1 sample = new Sample1();
         int     square = sample.intMethod(5);
         boolean bool   = sample.booleanMethod(true);

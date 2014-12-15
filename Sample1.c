@@ -14,6 +14,7 @@ JNIEXPORT jboolean JNICALL Java_Sample1_booleanMethod
 	return !boolean;
 }
 
+// strupr is not a standard function; defining own version here
 void mystrupr(char *str, int maxlen) 
 {
   int i=0;
@@ -45,4 +46,4 @@ JNIEXPORT jint JNICALL Java_Sample1_intArrayMethod
 	return sum;
 }
 
-void main(){}
+//void main(){}
